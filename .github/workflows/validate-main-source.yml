@@ -1,0 +1,27 @@
+name: Validate main PR source
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - edited
+      - ready_for_review
+
+jobs:
+  validate-main-source:
+    name: validate-main-source
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require dev as source branch
+        if: github.head_ref != 'dev'
+        run: |
+          echo "Only pull requests from dev can target main."
+          echo "Current source branch: ${GITHUB_HEAD_REF}"
+          exit 1
+      - name: Accept dev source branch
+        if: github.head_ref == 'dev'
+        run: echo "Pull request source branch is dev."
