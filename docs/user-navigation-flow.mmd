@@ -1,0 +1,31 @@
+flowchart TD
+    Root["AppShell<br/>Ruta: /"]
+    Root --> Dashboard["TaskDashboardPage<br/>Ruta: /"]
+    Dashboard --> Summary["SummarySection<br/>Contadores del MVP"]
+    Dashboard --> List["TaskListSection<br/>Lista ordenada por ICE"]
+    Dashboard --> CreateAction["TaskCreateAction<br/>FAB o Button Crear"]
+
+    CreateAction --> NewTask["TaskFormPage o TaskFormDialog<br/>Ruta: /tasks/new"]
+    List --> TaskItem["TaskItem<br/>Acciones por tarea"]
+    TaskItem --> EditTask["TaskFormPage o TaskFormDialog<br/>Ruta: /tasks/:taskId/edit"]
+    TaskItem --> ConfirmToggle["TaskStatusAction<br/>Completar o reabrir"]
+    TaskItem --> DeleteAction["TaskDeleteAction<br/>Eliminar tarea"]
+
+    NewTask --> AiPanel["AiSuggestionPanel<br/>Seccion dentro del formulario"]
+    EditTask --> AiPanel
+    NewTask --> Confirmed["TaskConfirmedSummary<br/>Estado posterior a crear"]
+    EditTask --> Confirmed
+    Confirmed --> Dashboard
+
+    Dashboard --> Empty["EmptyTasksState<br/>Cuando no hay tareas"]
+    Empty --> CreateAction
+
+    classDef route fill:#E3F2FD,stroke:#1565C0,color:#0D47A1;
+    classDef section fill:#FFFFFF,stroke:#90A4AE,color:#263238;
+    classDef action fill:#E8F5E9,stroke:#2E7D32,color:#1B5E20;
+    classDef state fill:#FFF8E1,stroke:#F9A825,color:#5D4037;
+
+    class Root,Dashboard,NewTask,EditTask route;
+    class Summary,List,TaskItem,AiPanel section;
+    class CreateAction,ConfirmToggle,DeleteAction action;
+    class Confirmed,Empty state;

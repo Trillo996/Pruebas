@@ -1,0 +1,49 @@
+flowchart TD
+    A([Usuario entra en la app]) --> B["AppShell"]
+    B --> C["TaskDashboardPage"]
+    C --> D["SummarySection + TaskListSection"]
+    D --> E{Hay tareas?}
+    E -- "No" --> F["EmptyState con CTA Crear tarea"]
+    E -- "Si" --> G["TaskList ordenada por ICE"]
+    F --> H["Accion: Crear tarea"]
+    G --> H
+    H --> I["TaskFormDialog o TaskFormPage"]
+    I --> J["Usuario escribe titulo"]
+    J --> K["Usuario escribe descripcion opcional"]
+    K --> L{Quiere sugerencia IA?}
+    L -- "No" --> M["Introduce Impacto, Confianza y Facilidad manualmente"]
+    L -- "Si" --> N{Descripcion completa?}
+    N -- "No" --> O["TextField error: descripcion requerida para IA"]
+    O --> K
+    N -- "Si" --> P["Button: Calcular ICE con IA"]
+    P --> Q["LoadingState con CircularProgress"]
+    Q --> R{Respuesta IA valida?}
+    R -- "No" --> S["Alert de error + edicion manual disponible"]
+    S --> M
+    R -- "Si" --> T["AiSuggestionPanel"]
+    T --> U["Muestra Impacto, Confianza, Facilidad, ICE y justificacion"]
+    U --> V{Usuario acepta la sugerencia?}
+    V -- "Edita" --> W["IceManualFields con Slider o TextField"]
+    V -- "Acepta" --> X["Valores ICE aplicados al formulario"]
+    W --> X
+    M --> X
+    X --> Y["Usuario revisa datos finales"]
+    Y --> Z{Formulario valido?}
+    Z -- "No" --> AA["HelperText en campos con error"]
+    AA --> I
+    Z -- "Si" --> AB["Confirmar tarea"]
+    AB --> AC["Crear tarea en sesion"]
+    AC --> AD["TaskConfirmedSummary o Snackbar"]
+    AD --> AE["TaskList actualizada por mayor ICE"]
+
+    classDef screen fill:#E3F2FD,stroke:#1565C0,color:#0D47A1;
+    classDef action fill:#E8F5E9,stroke:#2E7D32,color:#1B5E20;
+    classDef decision fill:#FFF8E1,stroke:#F9A825,color:#5D4037;
+    classDef error fill:#FFEBEE,stroke:#C62828,color:#B71C1C;
+    classDef final fill:#F3E5F5,stroke:#6A1B9A,color:#4A148C;
+
+    class B,C,D,F,G,I,T,AD screen;
+    class H,P,Q,U,X,Y,AB,AC,AE action;
+    class E,L,N,R,V,Z decision;
+    class O,S,AA error;
+    class A final;
